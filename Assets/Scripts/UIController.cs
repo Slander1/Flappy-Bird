@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,11 +8,17 @@ using UnityEngine.UI;
 public class UIController : MonoBehaviour
 {
     [SerializeField] private Image RestartImage;
+    [SerializeField] private Button StartBtn;
+    
+    public static Action onStartBtn; 
     private void OnEnable()
     {
         BirdController.birdDie += BirdDie;
     }
-
+    private void OnDisable()
+    {
+        BirdController.birdDie -= BirdDie;
+    }
     private void BirdDie()
     {
         RestartImage.gameObject.SetActive(true);
@@ -19,12 +26,20 @@ public class UIController : MonoBehaviour
 
     public void OnRestartBtn()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        ObstacleSpawner.instance.coroutineWork = true;
+        onStartBtn?.Invoke();
+        RestartImage.gameObject.SetActive(false);
     }
 
-    private void OnDisable()
+    public void OnStartBtn()
     {
-        BirdController.birdDie -= BirdDie;
+        ObstacleSpawner.instance.coroutineWork = true;
+        onStartBtn?.Invoke();
+        StartBtn.gameObject.SetActive(false);
     }
 
+    public void OnMenuBtn()
+    {
+        
+    }
 }

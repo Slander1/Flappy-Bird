@@ -24,6 +24,7 @@ public class BirdController : MonoBehaviour
         {
             Destroy(transform.gameObject);
             birdDie?.Invoke();
+            ObstacleSpawner.instance.coroutineWork = false;
         }
         
     }
